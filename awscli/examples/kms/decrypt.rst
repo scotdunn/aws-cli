@@ -27,7 +27,7 @@ The command does several things:
     The final part of the command (``> ExamplePlaintextFile``) saves the binary plaintext data to a file.
 
     
-**Example: Using an encryption context **
+**Example: Using an encryption context**
 
 The following command uses an encryption context in a command to decrypt the contents of the ExampleEncryptedMessage file. In AWS KMS, an `encryption context <https://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html>`_ is a collection of non-secret name-value pairs that are cryptographically bound to the encrypted data. 
 

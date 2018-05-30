@@ -27,9 +27,11 @@ The command does several things:
     The final part of the command (``> ExampleEncryptedFile``) saves the binary ciphertext to a file to make decryption easier. For an example command that uses the AWS CLI to decrypt data, see the `decrypt examples <decrypt.html#examples>`_.
 
 
-**Example: Using an encryption context **
+**Example: Using an encryption context**
 
-The following command uses an encryption context in a command to encrypt a 'hello world' string. In AWS KMS, an `encryption context <https://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html>`_ is a collection of non-secret name-value pairs that are cryptographically bound to the encrypted data. To decrypt the data, you need to provide the same encryption context. You can also use the encryption context to control access to a CMK and identify the Encrypt operation CloudTrail logs.
+This example shows how to use an encryption context in a command to encrypt a 'hello world' string. 
+
+In AWS KMS, an `encryption context <https://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html>`_ is a collection of non-secret name-value pairs that are cryptographically bound to the encrypted data. To decrypt the data, you need to provide the same encryption context. You can also use the encryption context to control access to a CMK and identify the Encrypt operation CloudTrail logs.
 
 In this example, the encryption context consists of two name-value pairs, ``Dept=IT`` and ``Purpose=Test``, separated by a comma. This example uses the shorthand syntax, but you can use JSON syntax or specify the path to a file that contains the encryption context in JSON or shorthand syntax.
 
