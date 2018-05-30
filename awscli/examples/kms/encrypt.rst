@@ -30,35 +30,12 @@ About this command:
     The final part of the command (``> ExampleEncryptedFile``) saves the binary ciphertext to a file to make decryption easier. For an example command that uses the AWS CLI to decrypt data, see the `decrypt examples <decrypt.html#examples>`_.
 
 
-Example: Using an encryption context
-####################################
-
-This example shows how to use an encryption context in a command to encrypt a 'hello world' string. 
-
-In AWS KMS, an `encryption context <https://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html>`_ is a collection of non-secret name-value pairs that are cryptographically bound to the encrypted data. 
-
-To decrypt the data, you need to provide the same encryption context. Otherwise, the Decrypt operation fails with an ``InvalidCiphertextException`` exception. You can also use the encryption context to `control access to a CMK <https://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html#encryption-context-authorization>`_ and `identify the operation <https://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html#encryption-context-auditing>`_ CloudTrail logs. 
-
-In this example, the encryption context consists of two name-value pairs, ``Dept=IT`` and ``Purpose=Test``, separated by a comma. This example uses the shorthand syntax, but you can use JSON syntax or specify the path to a file that contains the encryption context in JSON or shorthand syntax.
-
-.. code::
-
-    aws kms encrypt --key-id 1234abcd-12ab-34cd-56ef-1234567890ab --plaintext 'hello world' --encryption-context Dept=IT,Purpose=Test --output text --query CiphertextBlob | base64 --decode > ExampleEncryptedMessage
-
-If you use the JSON format at a Windows command prompt, be sure to use a backslash character (\) to escape all quotation marks inside the curly braces. For example: 
-
-.. code::
-
-    aws kms encrypt --key-id 1234abcd-12ab-34cd-56ef-1234567890ab --plaintext 'hello world' --encryption-context '{\"Dept\": \"IT\",\"Purpose\": \"Test\"}' --output text --query CiphertextBlob > C:\Temp\ExampleEncryptedMessage.txt
-    
-    
 Example: Encrypting data in Windows (cmd.exe)
 #############################################
 
 The preceding example assumes the ``base64`` utility is available, which is commonly the case on Linux and macOS. When using ``cmd.exe`` in Windows, use ``certutil`` instead of ``base64``. This requires two commands, as shown in the following examples.
 
 You can also use the `Invoke-KMSEncrypt <https://docs.aws.amazon.com/powershell/latest/reference/items/Invoke-KMSEncrypt.html>`_ cmdlet in the AWSPowerShell module on Windows, macOS, or Linux systems.
-
 
 .. code::
 
@@ -67,3 +44,56 @@ You can also use the `Invoke-KMSEncrypt <https://docs.aws.amazon.com/powershell/
 .. code::
 
     certutil -decode C:\Temp\ExampleEncryptedFile.base64 C:\Temp\ExampleEncryptedFile
+
+Example: Using an encryption context
+####################################
+
+The following examples show how to use an encryption context in a command to encrypt a 'hello world' string. 
+
+In AWS KMS, an `encryption context <https://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html>`_ is a collection of non-secret name-value pairs that are cryptographically bound to the encrypted data. To decrypt the data, you need to provide the same encryption context. Otherwise, the Decrypt operation fails with an ``InvalidCiphertextException`` exception. You can also use the encryption context to `control access to a CMK <https://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html#encryption-context-authorization>`_ and `identify the operation <https://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html#encryption-context-auditing>`_ CloudTrail logs. 
+
+Part 1: Simple encryption context
+=================================
+
+In the following example, the encryption context is ``Dept=IT``. Each command demonstrates a different command syntax, but they are all equivalent.
+
+* Shorthand syntax:
+.. code::
+    aws kms encrypt --encryption-context Dept=IT --key-id 1234abcd-12ab-34cd-56ef-1234567890ab --plaintext 'hello world' --output text --query CiphertextBlob | base64 --decode > ExampleEncryptedMessage
+
+* JSON
+.. code::
+    aws kms encrypt --encryption-context '{"Dept": "IT"}' --key-id 1234abcd-12ab-34cd-56ef-1234567890ab --plaintext 'hello world' --output text --query CiphertextBlob | base64 --decode > ExampleEncryptedMessage
+
+* File containing JSON or shorthand syntax
+.. code::
+    aws kms encrypt --encryption-context file://encryptionContext --key-id 1234abcd-12ab-34cd-56ef-1234567890ab --plaintext 'hello world' --output text --query CiphertextBlob | base64 --decode > ExampleEncryptedMessage
+    
+If you use the JSON format in a Windows command prompt (``cmd.exe``), be sure to use a backslash character (\) to escape all quotation marks inside the curly braces. For example: 
+.. code::
+
+    aws kms encrypt --encryption-context '{\"Dept\": \"IT\"}' --key-id 1234abcd-12ab-34cd-56ef-1234567890ab --plaintext 'hello world' --output text --query CiphertextBlob > C:\Temp\ExampleEncryptedMessage.txt
+
+
+Part 1: Multi-value encryption context
+======================================
+
+The encryption context can include multiple name-value pairs separated by a comma. In this example, the encryption context consists of two name-value pairs, ``Dept=IT`` and ``Purpose=Test``. Each command demonstrates a different command syntax, but they are all equivalent.
+
+* Shorthand syntax:
+.. code::
+    aws kms encrypt --encryption-context Dept=IT,Purpose=Test --key-id 1234abcd-12ab-34cd-56ef-1234567890ab --plaintext 'hello world' --output text --query CiphertextBlob | base64 --decode > ExampleEncryptedMessage
+
+* JSON
+.. code::
+    aws kms encrypt --encryption-context '{"Dept": "IT","Purpose": "Test"}' --key-id 1234abcd-12ab-34cd-56ef-1234567890ab --plaintext 'hello world' --output text --query CiphertextBlob | base64 --decode > ExampleEncryptedMessage
+
+* File containing JSON or shorthand syntax
+.. code::
+    aws kms encrypt --encryption-context file://encryptionContext --key-id 1234abcd-12ab-34cd-56ef-1234567890ab --plaintext 'hello world' --output text --query CiphertextBlob | base64 --decode > ExampleEncryptedMessage
+    
+If you use the JSON format in a Windows command prompt (``cmd.exe``), be sure to use a backslash character (\) to escape all quotation marks inside the curly braces. For example: 
+.. code::
+
+    aws kms encrypt --encryption-context '{\"Dept\": \"IT\",\"Purpose\": \"Test\"}' --key-id 1234abcd-12ab-34cd-56ef-1234567890ab --plaintext 'hello world' --output text --query CiphertextBlob > C:\Temp\ExampleEncryptedMessage.txt
+    
