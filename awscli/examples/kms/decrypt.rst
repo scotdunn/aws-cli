@@ -11,25 +11,23 @@ This command does not specify an AWS KMS customer master key (CMK) because KMS c
 
 About this command:
 
-* Uses the ``fileb://`` prefix in the value of the ``--ciphertext-blob`` parameter.
+* Gets the ciphertext from a file.
 
-    The ``fileb://`` prefix tells the CLI to get the plaintext data from a binary file. If the file is not in the current directory, type the full path to file. For example: ``fileb:///var/tmp/ExampleEncryptedFile`` or ``fileb://C:\Temp\ExampleEncryptedFile``.
+    The value of the ``plaintext`` parameter is a file path with the ``fileb://`` prefix. The ``b`` in the prefix tells the CLI that the files contains binary data.
 
     For more information about reading AWS CLI parameter values from a file, see `Loading Parameters from a File <https://docs.aws.amazon.com/cli/latest/userguide/cli-using-param.html#cli-using-param-file>`_ in the *AWS Command Line Interface User Guide* and `Best Practices for Local File Parameters <https://blogs.aws.amazon.com/cli/post/TxLWWN1O25V1HE/Best-Practices-for-Local-File-Parameters>`_ on the AWS Command Line Tool Blog.
 
-    The command assumes the ciphertext in ``ExampleEncryptedFile`` is binary data. The `encrypt examples <encrypt.html#examples>`_ demonstrate how to save a ciphertext this way.
+* Selects the plaintext data from the response.
 
-* Uses the ``--output`` and ``--query`` parameters to control the command's output.
+    The ``query`` parameter selects the ``Plaintext`` field of the response, which contains the decrypted data. The ``output`` parameter returns the output as text, rather than JSON. For more information about controlling output, see `Controlling Command Output <https://docs.aws.amazon.com/cli/latest/userguide/controlling-output.html>`_ in the *AWS Command Line Interface User Guide*.
 
-    These parameters select the CiphertextBlob field of the response, which contains the encrypted data, and returns the output as text, rather than JSON. For more information about controlling output, see `Controlling Command Output <https://docs.aws.amazon.com/cli/latest/userguide/controlling-output.html>`_ in the *AWS Command Line Interface User Guide*.
+* Decodes the plaintext data.
 
-* Uses the ``base64`` utility.
+    All fields in an AWS CLI response contain Base64-encoded text. Before you can decrypt the data, you must decode this text. This command uses the ``base64`` utility to convert the Base64-encoded text to binary data.
 
-    This utility decodes the extracted plaintext to binary data. The plaintext that is returned by a successful ``decrypt`` command is base64-encoded text. You must decode this text to obtain the original plaintext.
+* Saves the plaintext to a file.
 
-* Saves the binary plaintext to a file.
-
-    The final part of the command (``> ExamplePlaintextFile``) saves the binary plaintext data to a file.
+    The final part of the command (``> ExamplePlaintextFile``) saves the plaintext data to a file.
 
 
 Example: Encrypting data in Windows (cmd.exe)
@@ -60,7 +58,7 @@ In this example, the encryption context consists of two name-value pairs, ``Dept
 
     aws kms decrypt --encryption-context Dept=IT,Purpose=Test --ciphertext-blob fileb://ExampleEncryptedMessage --output text --query Plaintext | base64 --decode > ExamplePlaintextMessage
 
-If you use the JSON format in a Windows command prompt (``cmd.exe``), use a backslash character (\) to escape all quotation marks inside the curly braces, as shown in the following example.
+If you use the JSON format in a Windows command prompt (``cmd.exe``), use a backslash character (\\) to escape all quotation marks inside the curly braces, as shown in the following example.
 
 .. code::
 

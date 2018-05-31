@@ -13,22 +13,25 @@ The following command uses an AWS KMS CMK to generate a data key.
 
 About this command:
     
-* Identifies the CMK
+* Identifies the CMK.
 
     The command uses the ``key-id`` parameter to specify the AWS KMS customer master key (CMK) that generates and encrypts the data key. The value is a CMK ID, but you can use a CMK ARN, an alias, or an alias ARN.
 
-* Specifies the data key length
+* Specifies the data key length.
 
     The command requires either a ``key-spec`` or ``number-of-bytes`` parameter. This example uses the ``key-spec`` parameter with a value of ``AES_256``. All data keys that AWS KMS generates are `Advanced Encryption Standard <https://en.wikipedia.org/wiki/Advanced_Encryption_Standard>`_ (AES) symmetric keys, so this value is equivalent to using the ``number-of-bytes`` parameter with a value of 32.
 
 * Saves the response
 
-    This command saves the response in the ``dataKeyResponse`` variable. Because the response includes a plaintext data key, we don't write it to a file.
+    This command saves the response in the ``$dataKeyResponse`` variable. Because the response includes a plaintext data key, we don't write it to a file.
 
 Step 2: Examine the output
 ==========================
+The following command displays the command response in the ``$dataKeyResponse`` variable.
 
-The response includes a plaintext data key (``Plaintext``), a copy of that key encrypted under the CMK (``CiphertextBlob``), and the Amazon Resource Name (ARN) of the CMK that generated and encrypted the data keys (``KeyId``), all of which are represented by Base64-encoded strings. You can use the ``KeyId`` to verify that the operation used the intended CMK. Then, use the plaintext key to encrypt data outside of KMS, and dispose of it. You can safely store the encrypted data key with the encrypted data. It saves the response in the $dataKeyResponse variable.
+The response includes a plaintext data key (``Plaintext``), a copy of that key encrypted under the CMK (``CiphertextBlob``), and the Amazon Resource Name (ARN) of the CMK that generated and encrypted the data keys (``KeyId``), all of which are represented by Base64-encoded strings. 
+
+You can use the ``KeyId`` to verify that the operation used the intended CMK. Then, use the plaintext key to encrypt data outside of KMS, and dispose of it. You can safely store the encrypted data key with the encrypted data.
 
 .. code::
 
@@ -43,9 +46,11 @@ The response includes a plaintext data key (``Plaintext``), a copy of that key e
 
 Step 3: Get the plaintext data key
 ==================================
-The following command save the plaintext data key in a variable so you can use it to encrypt data and then dispose of it. 
+The following command saves the plaintext data key in a variable so you can use it to encrypt data and then delete it.
 
-The command gets the plaintext key from the $dataKeyResponse variable, Base64-decodes it, and saves it in the $plaintext variable. To get the plaintext key, this command uses the jq utility with the -r command that excludes quotation marks. JQ is available for Windows, macOS, and Linux systems. In PowerShell, use the `ConvertFrom-JSON <https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/convertfrom-json>`_ cmdlet.     
+The command gets the plaintext key from the ``$dataKeyResponse`` variable, Base64-decodes it, and saves it in the ``$plaintext`` variable. 
+
+To get the plaintext key, this command uses the **JQ** utility with the ``-r`` parameter that excludes quotation marks. JQ is available for Windows, macOS, and Linux systems. In PowerShell, use the `ConvertFrom-JSON <https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/convertfrom-json>`_ cmdlet.     
     
 .. code::
 
@@ -54,7 +59,7 @@ The command gets the plaintext key from the $dataKeyResponse variable, Base64-de
 
 Step 4: Save the encrypted data key
 ===================================
-The following command gets the encrypted data key from the $dataKeyResponse variable, base64-decodes it, and saves it in the encryptedDataKey file. 
+The following command gets the encrypted data key from the ``$dataKeyResponse`` variable, base64-decodes it, and saves it in the ``encryptedDataKey`` file. 
     
 .. code::
 
@@ -69,7 +74,7 @@ When you're ready to decrypt the data that you encrypted with the plaintext key,
 
     $decryptedDataKey=$(aws kms decrypt --ciphertext-blob fileb://encryptedDataKey --query Plaintext --output text | base64 --decode)
 
-This command uses the `Decrypt <decrypt.html>`_ operation to decrypt the encrypted data key. The value of the ``ciphertext-blob`` parameter is the file that contains the encrypted data key as binary data. To get the plaintext data key from the response, the command selects the Plaintext field of the response, returns it as text, and Base64-decodes it before saving it in the $decryptedDataKey variable.
+This command uses the `Decrypt <decrypt.html>`_ operation to decrypt the encrypted data key. The value of the ``ciphertext-blob`` parameter is the file that contains the encrypted data key as binary data. To get the plaintext data key from the response, the command selects the ``Plaintext`` field of the response, returns it as text, and Base64-decodes it before assigning it to the ``$decryptedDataKey`` variable.
 
 After using the plaintext key, delete it as soon as possible.
 
@@ -86,7 +91,7 @@ In this example, the encryption context consists of two name-value pairs, ``Proj
 
     aws kms generate-data-key --key-id 1234abcd-12ab-34cd-56ef-1234567890ab --number-of-bytes 32 --encryption-context Project=125,Purpose=Test
 
-If you use the JSON format at a Windows command prompt (``cmd.exe``), use a backslash character (\) to escape all quotation marks inside the curly braces, as shown in the following command.
+If you use the JSON format at a Windows command prompt (``cmd.exe``), use a backslash character (\\) to escape all quotation marks inside the curly braces, as shown in the following command.
 
 .. code::
 
