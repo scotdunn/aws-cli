@@ -9,6 +9,10 @@ The following command shows the recommended way to encrypt data with the AWS CLI
 
 About this command:
 
+* Identifies the CMK
+
+    The command uses the ``key-id`` parameter to specify the AWS KMS customer master key (CMK) that is used to encrypt the data. The value is a CMK ID, but you can use a CMK ARN, an alias, or an alias ARN.
+
 * Uses the ``fileb://`` prefix in the value of the ``--plaintext`` parameter.
 
     The ``fileb://`` prefix tells the CLI to get the plaintext data from a binary file. If the file is not in the current directory, type the full path to file. For example: ``fileb:///var/tmp/ExamplePlaintextFile`` or ``fileb://C:\Temp\ExamplePlaintextFile``.
@@ -59,17 +63,20 @@ In the following example, the encryption context is ``Dept=IT``. Each command de
 
 * Shorthand syntax:
 .. code::
+
     aws kms encrypt --encryption-context Dept=IT --key-id 1234abcd-12ab-34cd-56ef-1234567890ab --plaintext 'hello world' --output text --query CiphertextBlob | base64 --decode > ExampleEncryptedMessage
 
 * JSON
 .. code::
+
     aws kms encrypt --encryption-context '{"Dept": "IT"}' --key-id 1234abcd-12ab-34cd-56ef-1234567890ab --plaintext 'hello world' --output text --query CiphertextBlob | base64 --decode > ExampleEncryptedMessage
 
 * File containing JSON or shorthand syntax
 .. code::
+
     aws kms encrypt --encryption-context file://encryptionContext --key-id 1234abcd-12ab-34cd-56ef-1234567890ab --plaintext 'hello world' --output text --query CiphertextBlob | base64 --decode > ExampleEncryptedMessage
     
-If you use the JSON format in a Windows command prompt (``cmd.exe``), be sure to use a backslash character (\) to escape all quotation marks inside the curly braces. For example: 
+If you use the JSON format in a Windows command prompt (``cmd.exe``), use a backslash character (\) to escape all quotation marks inside the curly braces, as shown in the following example.
 .. code::
 
     aws kms encrypt --encryption-context '{\"Dept\": \"IT\"}' --key-id 1234abcd-12ab-34cd-56ef-1234567890ab --plaintext 'hello world' --output text --query CiphertextBlob > C:\Temp\ExampleEncryptedMessage.txt
@@ -82,14 +89,17 @@ The encryption context can include multiple name-value pairs separated by a comm
 
 * Shorthand syntax:
 .. code::
+
     aws kms encrypt --encryption-context Dept=IT,Purpose=Test --key-id 1234abcd-12ab-34cd-56ef-1234567890ab --plaintext 'hello world' --output text --query CiphertextBlob | base64 --decode > ExampleEncryptedMessage
 
 * JSON
 .. code::
+
     aws kms encrypt --encryption-context '{"Dept": "IT","Purpose": "Test"}' --key-id 1234abcd-12ab-34cd-56ef-1234567890ab --plaintext 'hello world' --output text --query CiphertextBlob | base64 --decode > ExampleEncryptedMessage
 
 * File containing JSON or shorthand syntax
 .. code::
+
     aws kms encrypt --encryption-context file://encryptionContext --key-id 1234abcd-12ab-34cd-56ef-1234567890ab --plaintext 'hello world' --output text --query CiphertextBlob | base64 --decode > ExampleEncryptedMessage
     
 If you use the JSON format in a Windows command prompt (``cmd.exe``), be sure to use a backslash character (\) to escape all quotation marks inside the curly braces. For example: 
