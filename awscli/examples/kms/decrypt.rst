@@ -62,5 +62,5 @@ If you use the JSON format in a Windows command prompt (``cmd.exe``), use a back
 
 .. code::
 
-    aws kms decrypt --encryption-context '{\"Dept\": \"IT\",\"Purpose\": \"Test\"}' --ciphertext-blob fileb://ExampleEncryptedMessage --output text --query Plaintext | base64 --decode > ExamplePlaintextMessage
+    aws kms decrypt --encryption-context "{\"Dept\": \"IT\",\"Purpose\": \"Test\"}" --ciphertext-blob fileb://ExampleEncryptedMessage --output text --query Plaintext | base64 --decode > ExamplePlaintextMessage
     
