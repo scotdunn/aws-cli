@@ -41,7 +41,7 @@ To decrypt the encrypted data key, use the `Decrypt <decrypt.html>`_ operation. 
     
 .. code::
     
-    $plaintext=$(aws kms decrypt --ciphertext-blob fileb://encryptedDataKey --query Plaintext --output text | base64 --decode)
+    plaintext=$(aws kms decrypt --ciphertext-blob fileb://encryptedDataKey --query Plaintext --output text | base64 --decode)
 
 
 Example: Using an encryption context
