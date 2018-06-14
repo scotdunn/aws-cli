@@ -99,7 +99,7 @@ The encryption context can include multiple name-value pairs separated by a comm
 * File containing JSON or shorthand syntax
 .. code::
 
-    aws kms encrypt --encryption-context file://encryptionContext --key-id 1234abcd-12ab-34cd-56ef-1234567890ab --plaintext "hello world" --output text --query CiphertextBlob | base64 --decode > ExampleEncryptedMessage
+    aws kms encrypt --encryption-context file://encryptionContext --key-id 1234abcd-12ab-34cd-56ef-1234567890ab --plaintext 'hello world' --output text --query CiphertextBlob | base64 --decode > ExampleEncryptedMessage
     
 If you use the JSON format in a Windows command prompt (``cmd.exe``), be sure to use a backslash character (\\) to escape all quotation marks inside the curly braces. For example: 
 .. code::
