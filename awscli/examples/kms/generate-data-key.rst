@@ -72,7 +72,7 @@ When you're ready to decrypt the data that you encrypted with the plaintext key,
 
 .. code::
 
-    $decryptedDataKey=$(aws kms decrypt --ciphertext-blob fileb://encryptedDataKey --query Plaintext --output text | base64 --decode)
+    decryptedDataKey=$(aws kms decrypt --ciphertext-blob fileb://encryptedDataKey --query Plaintext --output text | base64 --decode)
 
 This command uses the `Decrypt <decrypt.html>`_ operation to decrypt the encrypted data key. The value of the ``ciphertext-blob`` parameter is the file that contains the encrypted data key as binary data. To get the plaintext data key from the response, the command selects the ``Plaintext`` field of the response, returns it as text, and Base64-decodes it before assigning it to the ``$decryptedDataKey`` variable.
 
@@ -95,4 +95,4 @@ If you use the JSON format at a Windows command prompt (``cmd.exe``), use a back
 
 .. code::
 
-    aws kms generate-data-key --key-id 1234abcd-12ab-34cd-56ef-1234567890ab --number-of-bytes 32 --encryption-context '{\"Project\": \"125\",\"Purpose\": \"Test\" }'
+    aws kms generate-data-key --key-id 1234abcd-12ab-34cd-56ef-1234567890ab --number-of-bytes 32 --encryption-context "{\"Project\": \"125\",\"Purpose\": \"Test\" }"
