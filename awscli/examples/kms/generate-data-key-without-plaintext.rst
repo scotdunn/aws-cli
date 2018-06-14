@@ -41,7 +41,7 @@ To decrypt the encrypted data key, use the `Decrypt <decrypt.html>`_ operation. 
     
 .. code::
     
-    $plaintext=$(aws kms decrypt --ciphertext-blob fileb://encryptedDataKey --query Plaintext --output text | base64 --decode)
+    plaintext=$(aws kms decrypt --ciphertext-blob fileb://encryptedDataKey --query Plaintext --output text | base64 --decode)
 
 
 Example: Using an encryption context
@@ -59,4 +59,4 @@ If you use the JSON format at a Windows command prompt (``cmd.exe``), be sure to
 
 .. code::
 
-    aws kms generate-data-key --key-id 1234abcd-12ab-34cd-56ef-1234567890ab --number-of-bytes 32 --encryption-context '{\"Project\": \"125\"}'
+    aws kms generate-data-key --key-id 1234abcd-12ab-34cd-56ef-1234567890ab --number-of-bytes 32 --encryption-context "{\"Project\": \"125\"}"
