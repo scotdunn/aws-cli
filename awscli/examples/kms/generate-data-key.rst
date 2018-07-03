@@ -1,7 +1,7 @@
 Example: Generate a data key
 ############################
 
-This example shows how to use the ``generate-data-key`` command in the AWS CLI. The output contains a plaintext data key and a copy of the data key encrypted under the CMK. In this example, the commands save the plaintext data key in a variable and write the encrypted data key to a file. Because the values are Base64-encoded, the commands Base64-decode the values before saving them.
+This example shows how to use the ``generate-data-key`` command from the AWS CLI. The output contains a plaintext data key and a copy of the data key encrypted under the CMK. In this example, the commands save the plaintext data key in a variable and write the encrypted data key to a file. Because the values are base64-encoded, the commands base64-decode the values before saving them.
 
 Step 1: Generate the data key
 =============================
@@ -29,7 +29,7 @@ Step 2: Examine the output
 ==========================
 The following command displays the command response in the ``$dataKeyResponse`` variable.
 
-The response includes a plaintext data key (``Plaintext``), a copy of that key encrypted under the CMK (``CiphertextBlob``), and the Amazon Resource Name (ARN) of the CMK that generated and encrypted the data keys (``KeyId``), all of which are represented by Base64-encoded strings. 
+The response includes a plaintext data key (``Plaintext``), a copy of that key encrypted under the CMK (``CiphertextBlob``), and the Amazon Resource Name (ARN) of the CMK that generated and encrypted the data keys (``KeyId``), all of which are represented by base64-encoded strings. 
 
 You can use the ``KeyId`` to verify that the operation used the intended CMK. Then, use the plaintext key to encrypt data outside of KMS, and dispose of it. You can safely store the encrypted data key with the encrypted data.
 
@@ -48,7 +48,7 @@ Step 3: Get the plaintext data key
 ==================================
 The following command saves the plaintext data key in a variable so you can use it to encrypt data and then delete it.
 
-The command gets the plaintext key from the ``$dataKeyResponse`` variable, Base64-decodes it, and saves it in the ``$plaintext`` variable. 
+The command gets the plaintext key from the ``$dataKeyResponse`` variable, base64-decodes it, and saves it in the ``$plaintext`` variable. 
 
 To get the plaintext key, this command uses the **JQ** utility with the ``-r`` parameter that excludes quotation marks. JQ is available for Windows, macOS, and Linux systems. In PowerShell, use the `ConvertFrom-JSON <https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/convertfrom-json>`_ cmdlet.     
     
@@ -74,7 +74,7 @@ When you're ready to decrypt the data that you encrypted with the plaintext key,
 
     decryptedDataKey=$(aws kms decrypt --ciphertext-blob fileb://encryptedDataKey --query Plaintext --output text | base64 --decode)
 
-This command uses the `Decrypt <decrypt.html>`_ operation to decrypt the encrypted data key. The value of the ``ciphertext-blob`` parameter is the file that contains the encrypted data key as binary data. To get the plaintext data key from the response, the command selects the ``Plaintext`` field of the response, returns it as text, and Base64-decodes it before assigning it to the ``$decryptedDataKey`` variable.
+This command uses the `Decrypt <decrypt.html>`_ operation to decrypt the encrypted data key. The value of the ``ciphertext-blob`` parameter is the file that contains the encrypted data key as binary data. To get the plaintext data key from the response, the command selects the ``Plaintext`` field of the response, returns it as text, and base64-decodes it before assigning it to the ``$decryptedDataKey`` variable.
 
 After using the plaintext key, delete it as soon as possible.
 
@@ -83,7 +83,7 @@ Example: Using an encryption context
 
 The following command uses an encryption context in a command to generate a data key. 
 
-In AWS KMS, an `encryption context <https://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html>`_ is a collection of non-secret name-value pairs that are cryptographically bound to the encrypted data. To decrypt the encrypted data, you need to provide the same encryption context. Otherwise, the Decrypt operation fails with an ``InvalidCiphertextException`` exception. You can also use the encryption context to `control access to a CMK <https://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html#encryption-context-authorization>`_ and `identify the operation <https://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html#encryption-context-auditing>`_ CloudTrail logs.
+In AWS KMS, an `encryption context <https://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html>`_ is a collection of nonsecret name-value pairs that are cryptographically bound to the encrypted data. To decrypt the encrypted data, you need to provide the same encryption context. Otherwise, the decrypt operation fails with an ``InvalidCiphertextException`` exception. You can also use the encryption context to `control access to a CMK <https://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html#encryption-context-authorization>`_ and `identify the operation <https://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html#encryption-context-auditing>`_ in CloudTrail logs.
 
 In this example, the encryption context consists of two name-value pairs, ``Project=125`` and ``Purpose=Test``, separated by a comma. This example uses the shorthand syntax, but you can use JSON syntax or specify the path to a file that contains the encryption context in JSON or shorthand syntax. For a more detailed example that shows all formats, see the `Example: Using an encryption context <https://github.com/juneb/aws-cli/blob/kms-examples/awscli/examples/kms/encrypt.rst#example-using-an-encryption-context>`_. You do not need to use the same syntax in the ``encrypt`` and ``decrypt`` commands.
 
